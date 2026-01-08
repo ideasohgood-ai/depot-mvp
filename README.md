@@ -78,7 +78,9 @@ Open the URL printed in the terminal (typically http://localhost:5173) to use th
 - bus_positions – time-series history of bus positions (bus_id, floor_id, x, y, source, created_at).
 - checkpoints – named coordinates per floor used for entry/exit and intermediate checkpoints.[file:4]
 
-## Notes
+### Database Model (overview)
+To load demo data, run sample-data.sql in the Supabase SQL editor after creating the tables.
 
+## Notes
 - This project is intended as a hackathon-style MVP; it focuses on clear data flows and simulations rather than full production hardening.
 - Do not commit real Supabase keys; keep them only in your local `.env.local`.
