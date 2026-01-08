@@ -1,0 +1,598 @@
+/* =========================
+   Global base styles
+   ========================= */
+
+/* Typography + base colors */
+:root {
+  --panel-radius: 8px;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  color: #222;
+  background-color: #f3f4f6;
+}
+
+body {
+  margin: 0;
+}
+
+/* =========================
+   App shell (page layout)
+   ========================= */
+
+.app-root {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f9fafb, #e5e7eb);
+}
+
+.app-container {
+  padding: 16px 24px;
+}
+
+/* Let the title block take most width */
+.app-header {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.app-header-row {
+  display: flex;
+  align-items: stretch;
+  gap: 1px;
+  margin-bottom: 0;
+}
+
+/* Keep status panel compact on the right */
+.simulation-status-panel {
+  flex: 0 0 380px;
+}
+
+/* Optional: tighten text spacing inside status */
+.simulation-status-panel .panel-title {
+  margin-bottom: 4px;
+}
+
+.simulation-status-panel .status-text {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 15px;
+}
+
+.app-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  color: #111827;
+}
+
+.app-subtitle {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* =========================
+   Main grid layout
+   ========================= */
+
+.app-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* left column: slot allocation + alerts */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* right column: simulation + driver + map */
+.right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.right-top-row {
+  display: flex;
+  gap: 16px;
+}
+
+/* make Simulation and Driver share the width */
+.right-half {
+  flex: 1;
+}
+
+/* =========================
+   Panels (shared card style)
+   ========================= */
+
+.panel {
+  background: #ffffff;
+  border-radius: var(--panel-radius);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+  padding: 18px 20px 20px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: #111827;
+}
+
+.panel-description {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Make the panel body stretch and allow the map to fill it */
+.panel-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel.right-bottom .panel-body {
+  min-height: 300px; /* or 400–500px */
+}
+
+/* =========================
+   Simulation panel layout
+   ========================= */
+
+/* inner row separators */
+.simulation-section {
+  padding: 6px 10px 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.simulation-section:first-of-type {
+  padding-top: 0;
+}
+
+.simulation-section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 6px;
+}
+
+.simulation-status {
+  margin-top: 8px;
+}
+
+/* fields + buttons */
+.field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.field-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.text-input {
+  min-width: 130px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 13px;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  font-size: 13px;
+  cursor: pointer;
+  color: #111827;
+  transition: background 0.15s ease, transform 0.05s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn-primary {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.status-text {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #4b5563;
+}
+
+/* =========================
+   Depot map
+   ========================= */
+
+.map-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+}
+
+/* Map frame fills the wrapper, minus a small padding border */
+.map-frame {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 260px; /* or larger if you want a taller map */
+  border-radius: 12px;
+  border: 1px dashed #d1d5db;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/* Grid and markers use absolute positioning inside the frame */
+.map-grid {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: linear-gradient(
+      to right,
+      rgba(209, 213, 219, 0.35) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(209, 213, 219, 0.35) 1px,
+      transparent 1px
+    );
+  background-size: 40px 40px;
+}
+
+.map-label {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Markers stay as you already had */
+.bus-marker {
+  position: absolute;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* =========================
+   Slot allocation dashboard
+   ========================= */
+
+/* bay list in alert view / slot view */
+.bay-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.bay-item {
+  font-size: 13px;
+  padding: 3px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bay-meta {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.bay-status {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  color: #ffffff;
+}
+
+/* override bay card styling */
+.bay-override {
+  background: #fef2f2;
+  border-color: #dc2626;
+}
+
+/* danger tag variant */
+.tag.danger {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+/* slot allocation header, filters, actions */
+.slot-dashboard-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.slot-dashboard-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #111827;
+}
+
+.slot-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.slot-filters button {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+  color: #111827;
+  transition: background 0.15s ease, transform 0.05s ease,
+    box-shadow 0.15s ease;
+}
+
+.slot-filters button.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+}
+
+.slot-actions {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.slot-actions input {
+  min-width: 150px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  font-size: 12px;
+}
+
+.slot-actions input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+}
+
+.slot-actions button {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  font-size: 12px;
+  cursor: pointer;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+  transition: background 0.15s ease, transform 0.05s ease,
+    box-shadow 0.15s ease;
+}
+
+.slot-actions button:hover,
+.slot-filters button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+}
+
+.slot-actions button:active,
+.slot-filters button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.slot-status {
+  font-size: 12px;
+  color: #4b5563;
+}
+
+/* Wrapper that will scroll if there are many bays */
+.slot-grid-wrapper {
+  max-height: 215px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Keep the existing grid styling */
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.bay-card {
+  border-radius: var(--panel-radius);
+  padding: 8px 10px;
+  font-size: 11px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bay-free {
+  background: #ecfdf3;
+  border-color: #bbf7d0;
+}
+
+.bay-occupied {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.bay-charging {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.bay-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bay-code {
+  font-weight: 600;
+  color: #111827;
+}
+
+.bay-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tag {
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 10px;
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.tag.charging {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.tag.status {
+  background: #e5e7eb;
+}
+
+/* assign / clear buttons in bay cards */
+.bay-clear {
+  margin-top: 4px;
+  width: 100%;
+  background: #b91c1c;
+  color: #fef2f2;
+  border: 1px solid #b91c1c;
+  border-radius: 999px;
+  padding: 3px 0;
+  font-size: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease,
+    box-shadow 0.15s ease;
+}
+
+.bay-free .bay-clear {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.bay-clear:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+}
+
+.bay-clear:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Make the Override Alerts panel body fixed height and scrollable */
+.override-alerts-wrapper {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Vertical list of separate alert cards */
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Individual alert card styling */
+.alert-body > div {
+  margin-top: 2px;
+}
+
+.alert-card {
+  border-radius: var(--panel-radius);
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+
+.alert-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.alert-timestamp {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.alert-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.alert-incident-status {
+  font-size: 11px;
+  text-align: right;
+}
+
+.alert-raw-status {
+  margin-left: 4px;
+  color: #9ca3af;
+}
