@@ -1,73 +1,84 @@
-# React + TypeScript + Vite
+# Depot Bays MVP Demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interactive depot simulation built with React, TypeScript, Vite, and Supabase. It models buses entering a depot, moving through checkpoints, receiving bay allocations, and parking on different levels.[file:4][file:7]
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Simulation Panel**
+  - Trigger bus entry/exit at the depot gates.
+  - Identify buses via ANPR or RFID fallback.
+  - Move buses through named checkpoints and between levels.
+  - Auto-move to allocated bay or a random free bay on the current level.[file:4]
 
-## React Compiler
+- **Driver View**
+  - Show the driver their assigned level, area, lot, and bay code.
+  - Confirm parking and detect wrong-bay parking after multiple attempts.
+  - Record override parking and update bay availability.[file:3]
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Slot Allocation Dashboard**
+  - Visualise bay availability by level, area, and charging capability.
+  - Manually allocate bays by plate.
+  - Auto-allocate based on charging requirements.[file:5]
 
-## Expanding the ESLint configuration
+- **Override Alerts**
+  - List historical and active override incidents.
+  - Compare allocated vs actual bay, level, and charging/maintenance fit.[file:6]
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Depot Map**
+  - 2D map of bus positions using `bus_positions` coordinates.
+  - Filters markers by current level via `depot_floors` IDs.
+  - “Locate” control to jump to the level where a specific bus currently is.[file:2][file:23]
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- React + TypeScript + Vite
+- Supabase (PostgreSQL + auto-generated APIs)
+- Custom CSS panels (no UI framework)
+- ESLint for basic type-aware linting
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Getting Started
+
+### Prerequisites
+
+- Node.js (LTS recommended)
+- A Supabase project with the `buses`, `bays`, `allocations`, `bus_positions`, `checkpoints`, and `depot_floors` tables set up as in the schema snippet.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/ideasohgood-ai/depot-mvp.git
+cd depot-mvp
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+npm install
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 3. Configure environment
+Create a .env.local file in the project root:
+```bash
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
+These values come from your Supabase project settings.
+
+### 4. Run the dev server
+```bash
+npm run dev
+```
+
+Open the URL printed in the terminal (typically http://localhost:5173) to use the app.
+
+### Database Model (overview)
+- buses – one row per bus, with plate_number, status, needs_charging, needs_maintenance.
+- depot_floors – depot levels, each with id (UUID) and level_number (1–4).
+- bays – parking bays on each floor, including area_code, lot_number, bay_code, is_charging_bay, is_available, x, y.
+- allocations – mapping of buses to bays with status, priority_reason, wrong_attempts, and optional override_bay_id.
+- bus_positions – time-series history of bus positions (bus_id, floor_id, x, y, source, created_at).
+- checkpoints – named coordinates per floor used for entry/exit and intermediate checkpoints.[file:4]
+
+## Notes
+
+- This project is intended as a hackathon-style MVP; it focuses on clear data flows and simulations rather than full production hardening.
+- Do not commit real Supabase keys; keep them only in your local `.env.local`.
